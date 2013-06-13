@@ -59,35 +59,7 @@ public class BytePusherActivity extends Activity implements View.OnClickListener
 	}
 	
 	private void assembleBinary(File file){
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-			String line;
-			StringBuffer buffer = new StringBuffer();
-			while ((line = reader.readLine()) != null) {
-				if (line.indexOf("|") == -1) {
-					buffer.append(line);
-				}
-			}
-			String sourceNoComments = buffer.toString();
-			String mainMethod = sourceNoComments.substring(sourceNoComments.indexOf("_main=.")+7, sourceNoComments.indexOf("LL1=."));
-			String[] tokens = mainMethod.split("\\s");
-			for (String token: tokens) {
-				//leas 0x32
-				//leay 0x31
-				//tfr  0x1F
-				//pshs 0x34
-				//ldd  0xCC
-				//std
-				//lbra 0x16
-				if (token.contains("#")) {
-					fixMemoryAddress(token);
-				}
-			}
-			reader.close();
-		}
-		catch (Exception e) {
-			//Do nothing
-		}		
+		Assembler8080.assemble(file);	
 	}
 	
 	private byte[] getFileData(File file){
@@ -160,24 +132,5 @@ public class BytePusherActivity extends Activity implements View.OnClickListener
 		}
 		
 		return sourceFiles.toArray(new String[sourceFiles.size()]);		
-	}
-	
-	private int fixMemoryAddress(String addressString){
-		String modified = addressString.substring(1);
-		modified = modified.substring(0, modified.length()-1);
-		int i = 0;
-		byte[] oldBytes = modified.getBytes();
-		byte[] fixedBytes = new byte[oldBytes.length];
-		for(byte b: oldBytes){
-			fixedBytes[i] = (byte)(b&0x0F);
-			i++;
-		}
-		int address = 0;
-		for (byte b: fixedBytes) {
-			address+=b*Math.pow(10, i-1);
-			i--;
-		}
-
-		return address;
 	}
 }

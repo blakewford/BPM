@@ -3,13 +3,15 @@ package org.starlo.bytepusher;
 import java.io.*;
 import java.util.Locale;
 
+import android.util.Log;
+
 public class Assembler8080 {
 	
 	private static String[] mTokens = null;
 
-	public static void main(String[] args){
+	public static void assemble(File file){
 		try {
-			FileInputStream fileStream = new FileInputStream("demo.s");
+			FileInputStream fileStream = new FileInputStream(file);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
 			String line;
 			StringBuffer buffer = new StringBuffer();
@@ -38,12 +40,12 @@ public class Assembler8080 {
 	}
 	
 	private static void singleParamOutput(int firstTokenIndex){
-		System.out.println(mTokens[firstTokenIndex]+" "+mTokens[firstTokenIndex+1]);
+		Log.v("Single", mTokens[firstTokenIndex]+" "+mTokens[firstTokenIndex+1]);
 	}
 	
 	private static void doubleParamOutput(int firstTokenIndex){
 		String[] params = mTokens[firstTokenIndex+1].split(",");
-		System.out.println(mTokens[firstTokenIndex]+" "+params[0]+" "+params[1]);
+		Log.v("Double", mTokens[firstTokenIndex]+" "+params[0]+" "+params[1]);
 	}
 
 }
