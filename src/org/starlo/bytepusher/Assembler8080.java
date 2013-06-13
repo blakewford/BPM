@@ -1,6 +1,7 @@
 package org.starlo.bytepusher;
 
 import java.io.*;
+import java.util.Locale;
 
 public class Assembler8080 {
 	
@@ -22,7 +23,7 @@ public class Assembler8080 {
 			mTokens = finalString.split("\\s");
 			Opcodes8080 opcode = null;
 			for (int i=0; i<mTokens.length-1; i+=2) {
-				opcode = Opcodes8080.valueOf(mTokens[i].toUpperCase());
+				opcode = Opcodes8080.valueOf(mTokens[i].toUpperCase(Locale.US));
 				int ordinal = opcode.ordinal();
 				if (ordinal <= 8){
 					singleParamOutput(i);
@@ -30,6 +31,7 @@ public class Assembler8080 {
 					doubleParamOutput(i);
 				}
 			}
+			reader.close();
 		}catch (Exception e) {
 			//Do nothing!
 		}

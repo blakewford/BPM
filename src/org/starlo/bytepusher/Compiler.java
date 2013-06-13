@@ -36,6 +36,6 @@ public class Compiler
     }
 
     static {
-        System.loadLibrary("sccas09");
+        System.loadLibrary("sccas8080");
     }
 }

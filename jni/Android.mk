@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := sccas09
+LOCAL_MODULE    := sccas8080
 LOCAL_SRC_FILES := code8080.c\
 		error.c\
 		function.c\
