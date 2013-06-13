@@ -5,12 +5,8 @@ import org.starlo.bytepusher.R;
 import coder36.BytePusherVM;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
-import android.widget.*;
 import android.app.Fragment;
 import java.util.*;
-import java.io.*;
-import android.util.Log;
 
 public class BytePusherFragment extends Fragment{
 	

@@ -6,9 +6,7 @@ import android.app.*;
 import android.widget.*;
 import java.io.*;
 import java.util.*;
-import android.util.Log;
 import android.view.View;
-import android.content.Context;
 
 public class BytePusherActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
@@ -22,7 +20,6 @@ public class BytePusherActivity extends Activity implements View.OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.push_layout);
 		try {
-			File dir = getFilesDir();
 			File file = getLocalFile(DEMO_FILE_NAME);
 			
 			if (!file.exists())
@@ -35,7 +32,7 @@ public class BytePusherActivity extends Activity implements View.OnClickListener
 			ListView sourceFileList = (ListView)findViewById(R.id.source_file_list);
 			sourceFileList.setOnItemClickListener(this);
 			sourceFileList.setAdapter(
-				new ArrayAdapter(this, android.R.layout.simple_list_item_1, getSourceFiles())
+				new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getSourceFiles())
 			);
 		}catch (Exception e) {
 			//Do nothing!
@@ -62,7 +59,6 @@ public class BytePusherActivity extends Activity implements View.OnClickListener
 	}
 	
 	private void assembleBinary(File file){
-		String data = new String(getFileData(file));
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 			String line;
@@ -87,6 +83,7 @@ public class BytePusherActivity extends Activity implements View.OnClickListener
 					fixMemoryAddress(token);
 				}
 			}
+			reader.close();
 		}
 		catch (Exception e) {
 			//Do nothing

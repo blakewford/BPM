@@ -1,7 +1,5 @@
 package org.starlo.bytepusher;
 
-import android.util.Log;
-import android.view.View;
 import android.os.*;
 
 public class Compiler
