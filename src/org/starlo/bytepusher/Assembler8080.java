@@ -1,12 +1,14 @@
 package org.starlo.bytepusher;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.util.Log;
 
 public class Assembler8080 {
-	
+
+	private static ArrayList<Integer> mBinary = null;
 	private static String[] mTokens = null;
 
 	public static void assemble(File file){
@@ -27,11 +29,22 @@ public class Assembler8080 {
 			String finalString = rawString.substring(rawString.indexOf("main:")+5, rawString.indexOf("ret")).trim();
 			mTokens = finalString.split("\\s");
 			Opcodes8080 opcode = null;
+			mBinary = new ArrayList<Integer>();
 			for (int i=0; i<mTokens.length-1; i+=2) {
 				opcode = Opcodes8080.valueOf(mTokens[i].toUpperCase(Locale.US));
 				int ordinal = opcode.ordinal();
 				if (ordinal <= 8){
-					singleParamOutput(i);
+					switch(opcode){
+						case JMP:
+							//singleParamOutput(opcode, Integer.valueOf(mTokens[i+1]));
+							break;
+						case CALL:
+							singleParamOutput(opcode, Platformresources8080.valueOf(mTokens[i+1].substring(1).toUpperCase(Locale.US)).ordinal());
+							break;
+						default:
+							singleParamOutput(opcode, Platformresources8080.valueOf(mTokens[i+1].toUpperCase(Locale.US)).ordinal());
+							break;
+					}
 				}else if (ordinal <= 10) {
 					doubleParamOutput(i);
 				}
@@ -42,8 +55,9 @@ public class Assembler8080 {
 		}
 	}
 	
-	private static void singleParamOutput(int firstTokenIndex){
-		Log.v("Single", mTokens[firstTokenIndex]+" "+mTokens[firstTokenIndex+1]);
+	private static void singleParamOutput(Opcodes8080 opcode, int resource){
+		mBinary.add(opcode.ordinal());
+		mBinary.add(resource);
 	}
 	
 	private static void doubleParamOutput(int firstTokenIndex){
