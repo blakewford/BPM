@@ -71,6 +71,10 @@
             <arg value="opcodes8080.rb"/>
             <redirector output="./gen/org/starlo/bytepusher/Opcodes8080.java" alwayslog="true"/> 
         </exec>
+        <exec executable="ruby" failonerror="true" timeout="5000">
+            <arg value="platformresources8080.rb"/>
+            <redirector output="./gen/org/starlo/bytepusher/Platformresources8080.java" alwayslog="true"/> 
+        </exec>
     </target>
     <import file="custom_rules.xml" optional="true" />
 
