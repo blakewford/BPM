@@ -17,7 +17,10 @@ public class Assembler8080 {
 			StringBuffer buffer = new StringBuffer();
 			while ((line = reader.readLine()) != null) {
 				if (!line.contains(";")) {
-					buffer.append(line);
+					if(line.length() > 0 && line.charAt(0) == '?')
+						buffer.append("\t"+line);
+					else
+						buffer.append(line);
 				}
 			}
 			String rawString = buffer.toString();
@@ -35,7 +38,7 @@ public class Assembler8080 {
 			}
 			reader.close();
 		}catch (Exception e) {
-			//Do nothing!
+			//Do nothing
 		}
 	}
 	
