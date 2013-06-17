@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.os.Environment;
-import android.util.Log;
 
 public class Assembler8080 {
 
@@ -51,7 +50,8 @@ public class Assembler8080 {
 							break;
 					}
 				}else if (ordinal <= 10) {
-					doubleParamOutput(i);
+					String[] params = mTokens[i+1].split(",");
+					doubleParamOutput(opcode, Platformresources8080.valueOf(params[0].toUpperCase(Locale.US)).ordinal(), Integer.valueOf(params[1]));
 				}
 			}
 			reader.close();
@@ -81,9 +81,9 @@ public class Assembler8080 {
 		mBinary.add((byte) resource);
 	}
 	
-	private static void doubleParamOutput(int firstTokenIndex){
-		String[] params = mTokens[firstTokenIndex+1].split(",");
-		Log.v("Double", mTokens[firstTokenIndex]+" "+params[0]+" "+params[1]);
+	private static void doubleParamOutput(Opcodes8080 opcode, int resource, int value){
+		mBinary.add((byte) opcode.ordinal());
+		mBinary.add((byte) resource);
+		mBinary.add((byte) value);
 	}
-
 }
