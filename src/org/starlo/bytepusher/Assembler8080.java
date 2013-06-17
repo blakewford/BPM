@@ -4,11 +4,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import android.os.Environment;
 import android.util.Log;
 
 public class Assembler8080 {
 
-	private static ArrayList<Integer> mBinary = null;
+	private static ArrayList<Byte> mBinary = null;
 	private static String[] mTokens = null;
 
 	public static void assemble(File file){
@@ -29,9 +30,13 @@ public class Assembler8080 {
 			String finalString = rawString.substring(rawString.indexOf("main:")+5, rawString.indexOf("ret")).trim();
 			mTokens = finalString.split("\\s");
 			Opcodes8080 opcode = null;
-			mBinary = new ArrayList<Integer>();
+			mBinary = new ArrayList<Byte>();
 			for (int i=0; i<mTokens.length-1; i+=2) {
-				opcode = Opcodes8080.valueOf(mTokens[i].toUpperCase(Locale.US));
+				try{
+					opcode = Opcodes8080.valueOf(mTokens[i].toUpperCase(Locale.US));
+				}catch(Exception e){
+					continue;
+				}
 				int ordinal = opcode.ordinal();
 				if (ordinal <= 8){
 					switch(opcode){
@@ -50,14 +55,30 @@ public class Assembler8080 {
 				}
 			}
 			reader.close();
+			writeDebugBinary();
 		}catch (Exception e) {
-			//Do nothing
+			//Do nothing!
+		}
+	}
+	
+	private static void writeDebugBinary(){
+		File binaryFile = Environment.getExternalStorageDirectory();
+		FileOutputStream binary;
+		try {
+			binary = new FileOutputStream(binaryFile.getAbsolutePath()+"/binary");
+			byte[] bytes = new byte[mBinary.size()];
+			for(int i = 0; i < bytes.length; i++)
+				bytes[i] = mBinary.get(i);
+			binary.write(bytes);
+			binary.close();		
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
 	private static void singleParamOutput(Opcodes8080 opcode, int resource){
-		mBinary.add(opcode.ordinal());
-		mBinary.add(resource);
+		mBinary.add((byte) opcode.ordinal());
+		mBinary.add((byte) resource);
 	}
 	
 	private static void doubleParamOutput(int firstTokenIndex){
