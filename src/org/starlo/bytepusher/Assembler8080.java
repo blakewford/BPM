@@ -1,6 +1,7 @@
 package org.starlo.bytepusher;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -40,7 +41,7 @@ public class Assembler8080 {
 				if (ordinal <= 8){
 					switch(opcode){
 						case JMP:
-							//singleParamOutput(opcode, Integer.valueOf(mTokens[i+1]));
+							jmpParamOutput(opcode, Integer.valueOf(mTokens[i+1]));
 							break;
 						case CALL:
 							singleParamOutput(opcode, Platformresources8080.valueOf(mTokens[i+1].substring(1).toUpperCase(Locale.US)).ordinal());
@@ -81,9 +82,20 @@ public class Assembler8080 {
 		mBinary.add((byte) resource);
 	}
 	
+	private static void jmpParamOutput(Opcodes8080 opcode, int value){
+		mBinary.add((byte) opcode.ordinal());
+		writeAddress(value);
+	}
+	
 	private static void doubleParamOutput(Opcodes8080 opcode, int resource, int value){
 		mBinary.add((byte) opcode.ordinal());
 		mBinary.add((byte) resource);
-		mBinary.add((byte) value);
+		writeAddress(value);
+	}
+	
+	private static void writeAddress(int value){
+		byte[] address = ByteBuffer.allocate(5).putInt(value).array();
+		for(byte piece: address)
+			mBinary.add((byte) piece);		
 	}
 }
